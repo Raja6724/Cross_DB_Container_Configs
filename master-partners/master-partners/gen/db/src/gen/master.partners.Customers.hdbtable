@@ -1,0 +1,6 @@
+COLUMN TABLE master_partners_Customers (
+  ID INTEGER NOT NULL,
+  name NVARCHAR(5000),
+  additionalProperty NVARCHAR(5000),
+  PRIMARY KEY(ID)
+)

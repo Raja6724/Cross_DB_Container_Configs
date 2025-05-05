@@ -1,0 +1,5 @@
+VIEW MasterPartnerService_Customers AS SELECT
+  Customers_0.ID,
+  Customers_0.name,
+  Customers_0.additionalProperty
+FROM master_partners_Customers AS Customers_0

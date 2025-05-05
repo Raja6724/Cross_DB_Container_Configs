@@ -1,0 +1,12 @@
+COLUMN TABLE MasterPartnerService_Customers_drafts (
+  ID INTEGER NOT NULL,
+  name NVARCHAR(5000) NULL,
+  additionalProperty NVARCHAR(5000) NULL,
+  IsActiveEntity BOOLEAN,
+  HasActiveEntity BOOLEAN,
+  HasDraftEntity BOOLEAN,
+  DraftAdministrativeData_DraftUUID NVARCHAR(36) NOT NULL,
+  PRIMARY KEY(ID)
+) WITH ASSOCIATIONS (
+  MANY TO ONE JOIN MasterPartnerService_DraftAdministrativeData AS DraftAdministrativeData ON (DraftAdministrativeData.DraftUUID = DraftAdministrativeData_DraftUUID)
+)

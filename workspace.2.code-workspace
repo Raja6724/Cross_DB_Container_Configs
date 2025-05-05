@@ -1,0 +1,15 @@
+{
+    "folders": [
+        {
+            "path": "cap-fe-lr-table-views"
+        },
+        {
+            "name": "cap-fe-lr-op-actions",
+            "path": "cap-fe-lr-op-actions"
+        }
+    ],
+    "settings": {
+        "SAP HANA Database Explorer.ShowXsAdvancedConnections": true,
+        "SAP HANA Database Explorer.UseObjectsDefinitionForSqlGeneration.RetentionTime": 7
+    }
+}

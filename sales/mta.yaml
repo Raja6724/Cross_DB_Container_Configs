@@ -1,0 +1,157 @@
+_schema-version: 3.3.0
+ID: sales
+description: A simple CAP project.
+version: 1.0.0
+modules:
+- name: sales-srv
+  type: nodejs
+  path: gen/srv
+  requires:
+  - name: sales-db
+  - name: sales-auth
+  - name: sales-destination-service
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    buildpack: nodejs_buildpack
+    instances: 1
+  build-parameters:
+    builder: npm-ci
+- name: sales-db-deployer
+  type: hdb
+  path: gen/db
+  requires:
+  - name: sales-db
+    properties:
+      TARGET_CONTAINER: ~{hdi-service-name}
+  - name: master-db
+    group: SERVICE_REPLACEMENTS
+    properties:
+      key: master-db-hdi
+      service: ~{master-db-hdi}
+  parameters:
+    buildpack: nodejs_buildpack
+- name: sales-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: sales-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - sales.zip
+      name: sales
+      target-path: resources/
+- name: sales
+  type: html5
+  path: app/sales
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: sales-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: sales-destination-service
+    parameters:
+      content-target: true
+  - name: sales-repo-host
+    parameters:
+      service-key:
+        name: sales-repo-host-key
+  - name: sales-auth
+    parameters:
+      service-key:
+        name: sales-auth-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: sales_sales_repo_host
+          ServiceInstanceName: sales-html5-service
+          ServiceKeyName: sales-repo-host-key
+          sap.cloud.service: sales
+        - Authentication: OAuth2UserTokenExchange
+          Name: sales_sales_auth
+          ServiceInstanceName: sales-auth
+          ServiceKeyName: sales-auth-key
+          sap.cloud.service: sales
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+resources:
+- name: sales-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            HTML5.DynamicDestination: true
+            HTML5.ForwardAuthToken: true
+            Name: srv-api
+            ProxyType: Internet
+            Type: HTTP
+            URL: ~{srv-api/srv-url}
+            WebIDEAdditionalData: full_url
+            WebIDEEnabled: true
+            WebIDEUsage: odata_gen
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: sales-destination-service
+    service-plan: lite
+  requires:
+  - name: srv-api
+- name: sales-db
+  type: com.sap.xs.hdi-container
+  parameters:
+    service: hana
+    service-plan: hdi-shared
+  properties:
+    hdi-service-name: ${service-name}
+- name: master-db
+  type: org.cloudfoundry.existing-service
+  parameters:
+    service-name: master-db
+  properties:
+    master-db-hdi: ${service-name}
+- name: sales-auth
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      tenant-mode: dedicated
+      xsappname: sales
+    path: ./xs-security.json
+    service: xsuaa
+    service-plan: application
+- name: sales-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: sales-html5-service
+    service-plan: app-host
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+  - builder: custom
+    commands:
+    - npm ci
+    - npx cds build --production

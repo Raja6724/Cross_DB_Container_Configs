@@ -1,0 +1,20 @@
+{
+    "files.exclude": {
+        "**/.gitignore": true,
+        "**/.git": true,
+        "**/.vscode": true
+    },
+    "eslint.validate": [
+        "cds",
+        "csn"
+    ],
+    "eslint.runtime": "node",
+    "eslint.nodePath": "C:\\Users\\mio-f\\AppData\\Roaming\\npm\\node_modules\\@sap\\cds-dk\\node_modules",
+    "eslint.options": {
+        "configFile": "C:\\Users\\mio-f\\AppData\\Roaming\\npm\\node_modules\\@sap\\cds-dk\\lib\\lint\\.eslintrc.js"
+    },
+    "SAP HANA Database Explorer.ShowXsAdvancedConnections": true,
+    "SAP HANA Database Explorer.UseObjectsDefinitionForSqlGeneration.RetentionTime": 7,
+    "SAP HANA Project Explorer.bind.confirm existing service": false,
+    "SAP HANA Project Explorer.bind.confirm automatic undeployment": false
+}

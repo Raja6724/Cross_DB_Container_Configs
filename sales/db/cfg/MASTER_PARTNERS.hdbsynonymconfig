@@ -1,0 +1,14 @@
+{
+    "SALES_CUSTOMERS": {
+        "target": {
+            "object": "MASTER_PARTNERS_CUSTOMERS",
+            "schema.configure": "master-db-hdi/schema"
+        }
+    },
+    "SALES_CUSTOMERS_DRAFTS":{
+        "target": {
+            "object": "MASTERPARTNERSERVICE_CUSTOMERS_DRAFTS",
+            "schema.configure": "master-db-hdi/schema"
+        }
+    }
+}

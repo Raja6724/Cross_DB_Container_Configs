@@ -1,0 +1,37 @@
+{
+  "role": {
+    "name": "MASTER_PARTNERS_EXTERNAL_ACCESS",
+    "object_privileges": [
+      {
+        "name": "MASTER_PARTNERS_CUSTOMERS",
+        "type": "TABLE",
+        "privileges": [
+          "SELECT",
+          "INSERT",
+          "DELETE",
+          "UPDATE"
+        ]
+      },
+      {
+        "name": "MASTERPARTNERSERVICE_CUSTOMERS_DRAFTS",
+        "type": "TABLE",
+        "privileges": [
+          "DELETE",
+          "INSERT",
+          "SELECT",
+          "UPDATE"
+        ]
+      },
+      {
+        "name": "DRAFT_DRAFTADMINISTRATIVEDATA",
+        "type": "TABLE",
+        "privileges": [
+          "DELETE",
+          "INSERT",
+          "SELECT",
+          "UPDATE"
+        ]
+      }
+    ]
+  }
+}
